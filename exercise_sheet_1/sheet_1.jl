@@ -1,18 +1,20 @@
 # loading the packages
 using Pkg
-Pkg.activate()
-#Pkg.instantiate()
+Pkg.activate(@__DIR__)
+Pkg.instantiate()
+
 
 # Pkg.add("Distributions")
 # Pkg.add("Plots")
 # Pkg.add("LaTeXStrings")
+# Pkg.add("Random")
 
-using Pkg
 using Random
 using Distributions
 using Plots
 using LaTeXStrings
 
+figdir = joinpath(@__DIR__, "Plots")
 #######################
 # Exercise 1
 #######################
@@ -26,7 +28,7 @@ end
 
 function variance(x)
     m = average(x)
-    return sum((x .- m) .^ 2) / length(x)   # (<X>^2> - <X>^2)
+    return sum((x .- m) .^ 2) / length(x) 
 end
 
 function error(x)
@@ -37,12 +39,14 @@ average(x), variance(x), error(x)
 
 # (c)
 
-histogram(x, bins=100, normalize=true, label="Data", title="Histogram of Uniform(0,1) Data", xlabel="Value", ylabel="Density")
+fig_hist = histogram(x, bins=100, normalize=false, label="Data", title="Histogram of Uniform(0,1) Data", xlabel="Value", ylabel="Frequency")
+savefig(fig_hist, joinpath(figdir, "histogram.pdf"))
 
 # (d)
 d_x = rand(Uniform(0, 1), 100_000)
 d_y = rand(Uniform(0, 1), 100_000)
-scatter(d_x, d_y, label="Data", title="Scatter Plot of Uniform(0,1) Data", xlabel="X", ylabel="Y")
+fig = scatter(d_x, d_y, label="Data", title="Scatter Plot of Uniform(0,1) Data", xlabel="X", ylabel="Y")
+savefig(fig, joinpath(figdir, "scatter_plot.pdf"))
 
 # (e)
 function random_number_generator(seed, a, c, m, n)
@@ -100,12 +104,15 @@ function error_pi()
     end
 
     # Plot N vs Average Error 
-    plot(V, average_errors, xscale=:log10, yscale=:log10, 
-            label="Average Absolute Error", 
-            title="N vs. average absolute error",
-            xlabel="N",
-            ylabel="Average Absolute Error",
-            marker=:circle, markersize=5, linewidth=2)
+    fig_error = plot(V, average_errors, xscale=:log10, yscale=:log10, 
+                label="Average Absolute Error", 
+                 title="N vs. average absolute error",
+                 xlabel="N",
+                 ylabel="Average Absolute Error",
+                marker=:circle, markersize=5, linewidth=2)
+
+    return savefig(fig_error, joinpath(figdir, "error_plot.pdf"))
+
 end
 
 error_pi()
@@ -133,8 +140,9 @@ function visualization_pi_estimation(n)
     scatter!(x_outside, y_outside, label="Outside Circle", color=:red, marker=:circle, markersize=3)
     x = range(0,1,100)
     y = sqrt.(1 .- x.^2)
-    scatter!(x, y, label=L"y = \sqrt{1 - x^2}", color=:black, linewidth=2)
+    plot_pi_estimate =  scatter!(x, y, label=L"y = \sqrt{1 - x^2}", color=:black, linewidth=2)
+
+    return savefig(plot_pi_estimate, joinpath(figdir, "pi_estimation_visualization.pdf"))
 end
 
 visualization_pi_estimation(100_000)
-
