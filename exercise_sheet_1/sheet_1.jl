@@ -65,6 +65,12 @@ random_number_generator(1, 1664525, 1013904223, 2^32, 10)  # for example 10 rand
 #######################
 #(a)
 
+# P(incircle) = pi/4/1 = pi/4 for every point
+# using the law of large numbers (x_i are random variables) 
+# hits/n = (x_1 + x_2 + ... + x_n)/n -> E[x_i] = P(incircle) = pi/4 as n -> ∞
+# π/4 ≈ #points_inside_circle / #total_points
+
+
 function pi(n)
     total_points = 0
 
@@ -111,8 +117,9 @@ function error_pi()
                  ylabel="Average Absolute Error",
                 marker=:circle, markersize=5, linewidth=2)
 
-    return savefig(fig_error, joinpath(figdir, "error_plot.pdf"))
+     savefig(fig_error, joinpath(figdir, "error_plot.pdf"))
 
+     return nothing
 end
 
 error_pi()
