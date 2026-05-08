@@ -1,0 +1,10 @@
+Steps=100
+out=1
+seed=11
+file=conf_out
+length=1000
+reptation=0
+local=10
+cbgc=0
+pivot=10
+trajectory=0

@@ -1,0 +1,48 @@
+Here's a quick guide for working with linux terminal interface.
+
+########################################################################################################
+login to the linux system on the USB sticks with: 
+
+	username: komet
+	password: abc123
+########################################################################################################
+
+Open a new terminal window by pressing Ctrl+Alt+T or simply click the 2nd icon at the bottom. 
+
+Now to list down all the folders/files in the current directory, type: 
+
+	ls
+
+This will list down 2 folders (CODE_PIVOT and GK_SIM). To change directory to CODE_PIVOT folder, type:
+
+	cd CODE_PIVOT
+
+Now run the command:
+
+	make mc
+
+This will compile the program and will produce an executable named P1000. Now change the directory to the TEST folder (cd TEST) and after making necessary changes to eingabe file (see Exercise 1), run the following command:
+
+	../P1000 eingabe
+
+Now to open the trajectory file with vmd, run:
+
+	vmd trajectory.vtf
+
+########################################################################################################
+
+For exercises where you need to code, open the file manager (3rd icon at the bottom) and move to the folder 
+where you would like to execute your code. Right click and create a new document (say test.py or test.c).
+Again with right click, open the text file with "Mousepad" and type your code.
+Once done, right click and open a new terminal window in the current directory (Open Terminal Here).
+Now you can run your code as follows
+
+for python:
+
+	python3 test.py
+	
+for C:
+	gcc test.c -o a.out
+	./a.out
+
+########################################################################################################

@@ -117,9 +117,8 @@ function error_pi()
                  ylabel="Average Absolute Error",
                 marker=:circle, markersize=5, linewidth=2)
 
-     savefig(fig_error, joinpath(figdir, "error_plot.pdf"))
+    return savefig(fig_error, joinpath(figdir, "error_plot.pdf"))
 
-     return nothing
 end
 
 error_pi()
