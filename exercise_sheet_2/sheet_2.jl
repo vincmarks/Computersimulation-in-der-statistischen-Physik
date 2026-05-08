@@ -3,13 +3,13 @@
 # loading the packages
 using Pkg
 Pkg.activate(@__DIR__)
-Pkg.instantiate()
+#Pkg.instantiate()
 
 
-Pkg.add("Distributions")
-Pkg.add("Plots")
-Pkg.add("LaTeXStrings")
-Pkg.add("Random")
+# Pkg.add("Distributions")
+# Pkg.add("Plots")
+# Pkg.add("LaTeXStrings")
+# Pkg.add("Random")
 
 using Random
 using Distributions
@@ -81,3 +81,17 @@ plot!(p_random_walk,N_vals, N_vals .^(0.5), label = L"N^{0.5}", linewidth = 4,  
 
 savefig(p_random_walk, joinpath(figdir, "random_walk.pdf"))
 
+###############
+#exercise 4
+
+f(M,R,T,v) = 4*pi*(M/(2*pi*R*T))^(3/2) *v^2*exp(-M*v^2/(2*R*T))
+
+# M = 60.08*10^(-3)kg/mol
+# R = 8.314 H/(mol*K)
+# T = 1450 K 
+
+v = 0:0.1:2_000
+
+plot_bolzmann = plot(v, f.(60.08*10^(-3), 8.314,1450,v), label = L"f(v)"; plot_kwargs()..., top_margin = 5 * Plots.mm)
+
+savefig(plot_bolzmann, joinpath(figdir, "Bolzmann.pdf"))
