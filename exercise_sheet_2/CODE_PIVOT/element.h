@@ -431,17 +431,20 @@ double elj_energie_pivot(int ident, int type, MYVEC *mon, int exclude_start, int
  | io-functions |
  *--------------*/
 
-int sysout(char *,int );      
-/* reads sim. specifications and monomer positions  */ 
+int sysout(char *,int );
+/* reads sim. specifications and monomer positions  */
 /* from "conf_out"                                  */
 
 int sysout2(char *,int );
 /* reads sim. specifications and monomer positions  */
 /* from "conf_out" (file format to save disk space) */
 
-int sysin(char *);            
-/* writes sim. specifications and monomer positions */  
+int sysin(char *);
+/* writes sim. specifications and monomer positions */
 /* to "conf_out"                                    */
+
+int trajectory_header(char *name, int mcs);
+int trajectory_append(char *name, int mcs);
 
 void init_weight(void);      
 /* initializes weights for reweighted simulation    */

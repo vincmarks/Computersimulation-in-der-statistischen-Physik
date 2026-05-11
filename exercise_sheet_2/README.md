@@ -2,7 +2,7 @@
 
 2. To reproduce the plots open a Julia repl and execute
     ```julia
-        include("exercise_sheet_2/sheet_2.jl")
+        include("sheet_2.jl")
     ```
 
 3. The plots will be saved in the `Plots` folder.
