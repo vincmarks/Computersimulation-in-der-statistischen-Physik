@@ -37,13 +37,13 @@ figdir = joinpath(@__DIR__, "Plots")
 mkpath(figdir)
 
 # ─── Parameter ────────────────────────────────────────────────────────────────
-N   = 100
-r0  = 0.05   # Mindestabstand bei Partikelgenerierung
-rc  = 2.5    # Cutoff-Radius LJ
-ε   = 1.0
-σ   = 1.0
+N = 100
+r0 = 0.05   # minimal distance
+rc = 2.5    # Cutoff-Radius LJ
+ε = 1.0
+σ = 1.0
 
-# ─── (a) Initialisierung ──────────────────────────────────────────────────────
+# a)
 function init_particles(N, L, r0)
     data = Tuple{Float64,Float64}[]
     while length(data) < N
@@ -77,7 +77,8 @@ function minimum_image(xij, L)
     return xij
 end
 
-# ─── (b) Potentiale ───────────────────────────────────────────────────────────
+# b)
+
 function U_LJ(r; ε=1.0, σ=1.0)
     return 4ε * ((σ/r)^12 - (σ/r)^6)
 end
@@ -100,7 +101,7 @@ function U_tot(x, y, L; rc=2.5, ε=1.0, σ=1.0)
     return U
 end
 
-# ─── (c) Energieänderung ──────────────────────────────────────────────────────
+# c)
 function energy_change(i, dx, dy, x, y, L; rc=2.5, ε=1.0, σ=1.0)
     E_old = 0.0
     E_new = 0.0
@@ -116,7 +117,7 @@ function energy_change(i, dx, dy, x, y, L; rc=2.5, ε=1.0, σ=1.0)
     return E_new - E_old
 end
 
-# ─── (d) Sweep mit Metropolis ─────────────────────────────────────────────────
+# d)
 function sweep!(x, y, T, Δ, L; rc=2.5, ε=1.0, σ=1.0)
     accepted = 0
     for i in 1:length(x)
@@ -132,13 +133,13 @@ function sweep!(x, y, T, Δ, L; rc=2.5, ε=1.0, σ=1.0)
     return accepted / length(x)
 end
 
-# ─── (e) Equilibrierung + Sampling ───────────────────────────────────────────
-L   = 10.0
-T   = 1.0
-Δ   = 0.1
-n_eq   = 1000
+# e)
+L  = 10.0
+T  = 1.0
+Δ  = 0.1
+n_eq = 1000
 n_samp = 10_000
-m      = 10
+m  = 10
 
 x_komp, y_komp = init_particles(N, L, r0)
 
@@ -146,7 +147,7 @@ for _ in 1:n_eq
     sweep!(x_komp, y_komp, T, Δ, L)
 end
 
-energies         = Float64[]
+energies = Float64[]
 acceptance_ratios = Float64[]
 
 for s in 1:n_samp
@@ -155,7 +156,7 @@ for s in 1:n_samp
     mod(s, m) == 0 && push!(energies, U_tot(x_komp, y_komp, L))
 end
 
-println("⟨E⟩/N        = ", mean(energies) / N)
+println("⟨E⟩/N = ", mean(energies) / N)
 println("Standardfehler = ", std(energies) / sqrt(length(energies)))
 println("Akzeptanzrate  = ", mean(acceptance_ratios))
 
@@ -177,7 +178,7 @@ for Δ_test in [0.001, 0.01, 0.1, 0.5]
         Δ_test, mean(E_tmp)/N, std(E_tmp)/sqrt(length(E_tmp)), mean(ar_tmp))
 end
 
-# ─── (f) Virial + Druck ───────────────────────────────────────────────────────
+# f)
 function virial(x, y, L; rc=2.5, ε=1.0, σ=1.0)
     W = 0.0
     for i in 1:length(x)
@@ -195,16 +196,16 @@ function virial(x, y, L; rc=2.5, ε=1.0, σ=1.0)
 end
 
 function pressure(rho, T, x, y, L; rc=2.5, ε=1.0, σ=1.0)
-    A            = L^2
-    W            = virial(x, y, L; rc, ε, σ)
-    ΔP_tail      = π * rho^2 * ε * (24/11 * (σ/rc)^12 - 12/5 * (σ/rc)^6)
+    A = L^2
+    W = virial(x, y, L; rc, ε, σ)
+    ΔP_tail = π * rho^2 * ε * (24/11 * (σ/rc)^12 - 12/5 * (σ/rc)^6)
     return rho * T + W / A + ΔP_tail
 end
 
 # Plot P vs rho
-T_plot   = 2.0
-Δ_plot   = 0.65
-n_eq_p   = 1000
+T_plot = 2.0
+Δ_plot = 0.65
+n_eq_p = 1000
 n_samp_p = 1000
 rho_vals = 0.01:0.02:0.5
 
@@ -233,4 +234,5 @@ rho_plot = collect(rho_vals)
 plt = plot(rho_plot, pressures_mc;
     label="LJ MC", xlabel=L"\rho", ylabel="P", plot_kwargs()...)
 plot!(plt, rho_plot, rho_plot .* T_plot;
-    label="Ideales Gas", linestyle=:dash, plot_kwargs()...)
+    label="Ideal gas", linestyle=:dash, plot_kwargs()...)
+savefig(plt, joinpath(figdir, "P_vs_rho.pdf"))
